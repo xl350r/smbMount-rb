@@ -55,12 +55,12 @@ class Mount
     puts
   end
 
-  `/sbin/mount_smbfs //#{self.user}:#{self.escape_all(self.password)}@#{self.server}/#{self.share} #{self.path}` # exec statement
-  if Dir.children("#{self.path}").length() > 0
+  e_code = system("/sbin/mount_smbfs //#{self.user}:#{self.escape_all(self.password)}@#{self.server}/#{self.share} #{self.path}") # exec statement
+  if e_code
     puts "share mounted to #{self.path}"
     return true
   else
-    puts "Mounting failed for mount point empty."
+    puts "Mounting failed for mount #{self.server}/#{self.share}"
     return false
   end
  end
