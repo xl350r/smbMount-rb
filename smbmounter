@@ -42,7 +42,7 @@ class Mount
     end
   end
 
-  if self.user.nil? # get user name if not provided
+  if self.user.nil? # get username if not provided
     puts "-- Provide username for server --"
     print "Username: "
     self.user = gets.chomp()
@@ -86,30 +86,35 @@ if __FILE__ == $0
         exit(1)
       end
     end
-    #if config_line["share"] == config_line["path"]
-    if config_line.key?("user") 
-      print ("Password for #{config_line['user']}: ")
-      pass = STDIN.noecho(&:gets).chomp
-      puts
-      i=0
-      while i < config_line["share"].length()
-        m = Mount.new(config_line["user"], pass, config_line["server"], config_line["share"][i], config_line["path"][i])
-        m.connect()
-        i+= 1
+    if config_line["share"].length() == config_line["path"].length()
+      if config_line.key?("user") 
+        print ("Password for #{config_line['user']}: ")
+        pass = STDIN.noecho(&:gets).chomp
+        puts
+        i=0
+        while i < config_line["share"].length()
+          m = Mount.new(config_line["user"], pass, config_line["server"], config_line["share"][i], config_line["path"][i])
+          m.connect()
+          i+= 1
+        end
+      else
+        print "Username for #{config_line['server']}: "
+        user = gets.chomp()
+        puts
+        print ("Password for #{user}: ")
+        pass = STDIN.noecho(&:gets).chomp
+        puts
+        i=0
+        while i < config_line["share"].length()
+          m = Mount.new(user, pass, config_line["server"], config_line["share"][i], config_line["path"][i])
+          m.connect()
+          i+= 1
+        end
       end
     else
-      print "Username for #{config_line['server']}: "
-      user = gets.chomp()
-      puts
-      print ("Password for #{user}: ")
-      pass = STDIN.noecho(&:gets).chomp
-      puts
-      i=0
-      while i < config_line["share"].length()
-        m = Mount.new(user, pass, config_line["server"], config_line["share"][i], config_line["path"][i])
-        m.connect()
-        i+= 1
-      end
+     puts "Error Number of share does not match number of paths"
+     puts "Number of shares: #{config_line['share'].length()}\nNumber of paths: #{config_line['path'].length()}"
+     exit(1)
     end
   end
 end
