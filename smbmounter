@@ -1,0 +1,116 @@
+#!/usr/bin/ruby
+# SMB Mounter
+# Author : Daniel Hoberecht
+# Created: 11/24/21
+
+require 'io/console'
+require 'fileutils'
+require 'JSON'
+
+class Mount 
+ 
+ attr_accessor :user, :password, :server, :share, :path
+
+ def escape_all(str)
+  str_ar = Array.new()
+  str.each_char do |c|
+    str_ar.push("%#{c.unpack("H*")[0]}")
+  end
+  str = str_ar.join("")
+ end
+
+ def initialize(user=nil, password=nil, server, share, path)
+   @user=user
+   @password=password
+   @server=server
+   @share=share.gsub(" ", "%#{" ".unpack("H*")[0]}")
+   @path=path
+ end
+
+ def connect()
+  if self.path.include?(";") or self.path.include?("&") # check for illegal characters
+    puts "#{self.path} has illegal characters"
+    return false
+  end
+
+  if ! Dir.exist?(self.path)
+    FileUtils.mkdir_p(self.path)
+  else
+    if Dir.children(self.path).length() > 0 
+      puts "#{self.path} is not empty"
+      return false
+    end
+  end
+
+  if self.user.nil? # get user name if not provided
+    puts "-- Provide username for server --"
+    print "Username: "
+    self.user = gets.chomp()
+  end
+
+  if self.password.nil? # get password if not provided
+    puts "-- Provide password for #{self.user} --"
+    print "Password: "
+    self.password=STDIN.noecho(&:gets).chomp # get password and do not echo
+    puts
+  end
+
+  `/sbin/mount_smbfs //#{self.user}:#{self.escape_all(self.password)}@#{self.server}/#{self.share} #{self.path}` # exec statement
+  if Dir.children("#{self.path}").length() > 0
+    puts "share mounted to #{self.path}"
+    return true
+  else
+    puts "Mounting failed for mount point empty."
+    return false
+  end
+ end
+end
+
+if __FILE__ == $0
+  script_dir = File.expand_path(File.dirname(__FILE__))
+  config = if File.exist?("#{script_dir}/Config.json")
+    File.open("#{script_dir}/Config.json")
+  else
+    nil
+  end
+  if config == nil
+    puts "Config file not present in #{script_dir}"
+    exit(1)
+  end
+  keys = ["server", "share", "path"]
+  config.each_line() do |line| 
+    config_line = JSON.parse(line)
+    keys.each do |e|
+      if ! config_line.key?(e)
+        puts "invalid config! does not have #{e}"
+        exit(1)
+      end
+    end
+    #if config_line["share"] == config_line["path"]
+    if config_line.key?("user") 
+      print ("Password for #{config_line['user']}: ")
+      pass = STDIN.noecho(&:gets).chomp
+      puts
+      i=0
+      while i < config_line["share"].length()
+        m = Mount.new(config_line["user"], pass, config_line["server"], config_line["share"][i], config_line["path"][i])
+        m.connect()
+        i+= 1
+      end
+    else
+      print "Username for #{config_line['server']}: "
+      user = gets.chomp()
+      puts
+      print ("Password for #{user}: ")
+      pass = STDIN.noecho(&:gets).chomp
+      puts
+      i=0
+      while i < config_line["share"].length()
+        m = Mount.new(user, pass, config_line["server"], config_line["share"][i], config_line["path"][i])
+        m.connect()
+        i+= 1
+      end
+    end
+  end
+end
+
