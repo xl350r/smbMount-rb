@@ -24,7 +24,7 @@ class Mount
    @password=password
    @server=server
    @share=share.gsub(" ", "%#{" ".unpack("H*")[0]}")
-   @path=path
+   @path=File.expand_path(path) # allows ~/ by expanding path. Allows relative pathing.
  end
 
  def connect()
