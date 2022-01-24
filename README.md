@@ -40,4 +40,4 @@ John needs 3 shares mounted from 2 seperate servers. He wants them in a folder o
 7.	Ensure the shares mounted, they should have their names be that of the shares and looks like drives rather than folders in finder.
 
 Note:
-As of v1.1 the "~/" is supported. Instead of writing "/Users/user/Desktop/Some_folder_mount" you can now write "~/Desktop/Some_folder_mount" for the path target.
+As of v1.1 the `~/` is supported. Instead of writing `/Users/user/Desktop/Some_folder_mount` you can now write `~/Desktop/Some_folder_mount` for the path target.
