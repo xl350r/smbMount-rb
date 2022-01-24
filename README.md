@@ -7,7 +7,7 @@ Overview:
 smbmounter is an OSX script written to make mounting SMB (Windows) shares easier and repeatable. With proper configuration a user will only need to double click on smbmounter for the drives to be mounted. No installation of other tools is required for the script to work. It uses purely the Standard library of ruby and builtin OSX binaries to perform the task.
 
 Configuration:
-1.	Transfer the ìsmbmounterî program and the ìConfig.jsonî file to a directory accessable to the user on the system. Example: /Users/bob/Desktop/script/
+1.	Transfer the ìsmbmounterî program and the ìConfig.jsonî file to a directory accessable to the user on the system. EX: `/Users/bob/Desktop/script/`
 2.	open the Config.json file in a text editor
 3.	The config file has 4 entries on each line.
 A.	server : hostname or ip address of server
@@ -15,7 +15,7 @@ B.	user : domain user that will be used to authenticate
 C.	share : shares that need to be mounted (delimeted between ì[ and ]î with î,î)
 D.	path  : paths to mount shares to, in-order (delimeted between ì[ and ]î with î,î) 
 4.	Multiple servers can have shares mounted from them but each complete json object must be contained on one line. 
-EX: {"server": "my_server", "user": "Test_user", "share": ["Company Data", "Employee Data"] , "path": ["/Users/dude/mnt/D", "/Users/dude/mnt/E"]}
+EX: `{"server": "my_server", "user": "Test_user", "share": ["Company Data", "Employee Data"] , "path": ["/Users/dude/mnt/D", "/Users/dude/mnt/E"]}`
 5.	Each Key and value must be in double quotes. Arrays such as share, and path must have their valus contained within square brackets and each sub entry double quoted delimited by commas.
 6.	Json objects are started and ended with curly braces ì{ and }î
 7.	Keys are seperate from values with colons, and each key value pair is seperate by commas.
@@ -33,8 +33,8 @@ John needs 3 shares mounted from 2 seperate servers. He wants them in a folder o
 2.	In the terminal navigate to the directory the script is located and run ëchmod +x smbmounterí.  Allowing the user to now be able to execute the script from finder.
 3.	Determinte the username for the user with whoami (in this case john).
 4.	Create the Config.json file, and open it (nano is recomended if using terminal). See image for example.
-{"server" : "Server1" "user": "smith" ["HR", "Management"], "path" : ["/Users/john/Desktop/Work/C","/Users/john/Desktop/Work/D"]}
-{"server" : "Server2", "user": "jsmith" share" ["Quickbooks"], "path": ["/Users/john/Desktop/Work/E"]}
+`{"server" : "Server1" "user": "smith" ["HR", "Management"], "path" : ["/Users/john/Desktop/Work/C","/Users/john/Desktop/Work/D"]}`
+`{"server" : "Server2", "user": "jsmith" share" ["Quickbooks"], "path": ["/Users/john/Desktop/Work/E"]}`
 5.	This file should be save in the same directory as the script.
 6.	Run the script by double clicking, it will prompt for a password for EACH server.
 7.	Ensure the shares mounted, they should have their names be that of the shares and looks like drives rather than folders in finder.
