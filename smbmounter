@@ -2,6 +2,7 @@
 # SMB Mounter
 # Author : Daniel Hoberecht
 # Created: 11/24/21
+# Version 1.1 (1/24/22)
 
 require 'io/console'
 require 'fileutils'
