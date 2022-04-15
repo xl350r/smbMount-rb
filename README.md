@@ -33,7 +33,7 @@ John needs 3 shares mounted from 2 seperate servers. He wants them in a folder o
 2.	In the terminal navigate to the directory the script is located and run ëchmod +x smbmounterí.  Allowing the user to now be able to execute the script from finder.
 3.	Determinte the username for the user with whoami (in this case john).
 4.	Create the Config.json file, and open it (nano is recomended if using terminal). See image for example.
-`{"server" : "Server1" "user": "smith" ["HR", "Management"], "path" : ["/Users/john/Desktop/Work/C","/Users/john/Desktop/Work/D"]}`
+`{"server" : "Server1" "user": "jsmith" ["HR", "Management"], "path" : ["/Users/john/Desktop/Work/C","/Users/john/Desktop/Work/D"]}`
 `{"server" : "Server2", "user": "jsmith" share" ["Quickbooks"], "path": ["/Users/john/Desktop/Work/E"]}`
 5.	This file should be save in the same directory as the script.
 6.	Run the script by double clicking, it will prompt for a password for EACH server.
